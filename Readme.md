@@ -1,125 +1,41 @@
 ## File Strcture
+### The Project
 ```
 root
 ├───src
 │   ├───ApiGateway
+│   │
 │   ├───Services
 │   │   ├───Catalogue
-│   │   │   ├───Api
-│   │   │   ├───Application
-│   │   │   ├───Domain
-│   │   │   └───Infrastructure
 │   │   ├───Collection
-│   │   │   ├───Api
-│   │   │   ├───Application
-│   │   │   ├───Domain
-│   │   │   └───Infrastructure
 │   │   ├───Community
-│   │   │   ├───Api
-│   │   │   ├───Application
-│   │   │   ├───Domain
-│   │   │   └───Infrastructure
 │   │   ├───Customer
-│   │   │   ├───Api
-│   │   │   ├───Application
-│   │   │   ├───Domain
-│   │   │   └───Infrastructure
 │   │   ├───Identity
-│   │   │   ├───Api
-│   │   │   ├───Application
-│   │   │   ├───Domain
-│   │   │   └───Infrastructure
 │   │   ├───Marketplace
-│   │   │   ├───Api
-│   │   │   ├───Application
-│   │   │   ├───Domain
-│   │   │   └───Infrastructure
 │   │   ├───Order
-│   │   │   ├───Api
-│   │   │   ├───Application
-│   │   │   ├───Domain
-│   │   │   └───Infrastructure
 │   │   ├───Payment
-│   │   │   ├───Api
-│   │   │   ├───Application
-│   │   │   ├───Domain
-│   │   │   └───Infrastructure
 │   │   └───Recommendation
-│   │       ├───Api
-│   │       ├───Application
-│   │       ├───Domain
-│   │       └───Infrastructure
+│   │
 │   ├───Shared
 │   │   ├───Application.Abstractions
 │   │   ├───Domain.Abstractions
 │   │   └───Infrastructure.Abstractions
+│   │
 │   └───SpaClient
 └───tests
     ├───ApiGateway
     │   └───Integration
+    │
     ├───Catalogue
-    │   ├───Integration
-    │   │   ├───Api
-    │   │   └───Infrastructure
-    │   └───Unit
-    │       ├───Application
-    │       └───Domain
     ├───Collection
-    │   ├───Integration
-    │   │   ├───Api
-    │   │   └───Infrastructure
-    │   └───Unit
-    │       ├───Application
-    │       └───Domain
     ├───Community
-    │   ├───Integration
-    │   │   ├───Api
-    │   │   └───Infrastructure
-    │   └───Unit
-    │       ├───Application
-    │       └───Domain
     ├───Customer
-    │   ├───Integration
-    │   │   ├───Api
-    │   │   └───Infrastructure
-    │   └───Unit
-    │       ├───Application
-    │       └───Domain
     ├───Identity
-    │   ├───Integration
-    │   │   ├───Api
-    │   │   └───Infrastructure
-    │   └───Unit
-    │       ├───Application
-    │       └───Domain
     ├───Marketplace
-    │   ├───Integration
-    │   │   ├───Api
-    │   │   └───Infrastructure
-    │   └───Unit
-    │       ├───Application
-    │       └───Domain
     ├───Order
-    │   ├───Integration
-    │   │   ├───Api
-    │   │   └───Infrastructure
-    │   └───Unit
-    │       ├───Application
-    │       └───Domain
     ├───Payment
-    │   ├───Integration
-    │   │   ├───Api
-    │   │   └───Infrastructure
-    │   └───Unit
-    │       ├───Application
-    │       └───Domain
     ├───Recommendation
-    │   ├───Integration
-    │   │   ├───Api
-    │   │   └───Infrastructure
-    │   └───Unit
-    │       ├───Application
-    │       └───Domain
+    │
     └───Shared
         ├───Integration
         │   └───Infrastructure
@@ -127,9 +43,36 @@ root
             ├───Application
             └───Domain
 ```
-## Note
+
+### A service
+```
+Service 
+├───Api
+├───Application
+├───Domain
+└───Infrastructure
+```
+### Tests for a service
+```
+Service
+├───Integration
+│   ├───Api
+│   └───Infrastructure
+└───Unit
+    ├───Application
+    └───Domain
+```
+
+## Notes
 Recommendation Context will be created at the end when everything else is done.<br>
-Marketplace and its supporting contexts (Order, Customer, Payment) will be added only after Collection, Community, Identity, Catalogue contexts.
+
+Marketplace and its supporting contexts (Order, Customer, Payment) will be added only after Collection, Community, Identity, Catalogue contexts.<br>
+
+Use acceptance tests instead of unit tests for the domain model. (Even though they will be in the unit tests project.)
+
+Use BDD (Behaviour Driven Design) designing tests (Given - When - Then tests)
 
 ## Todo log:
-- [ ] Add project references
+- [x] Add project references 
+  - references will be set up for individual projects when I start working on them.
+- [ ] Add domain abstractions
