@@ -1,0 +1,6 @@
+@MangaShelf.Catalogue.Api_HostAddress = http://localhost:5076
+
+GET {{MangaShelf.Catalogue.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
