@@ -1,3 +1,7 @@
+# MangaShelf Project
+
+## How to run
+
 ## File Strcture
 ### The Project
 ```
@@ -43,7 +47,6 @@ root
             ├───Application
             └───Domain
 ```
-
 ### A service
 ```
 Service 
@@ -79,5 +82,15 @@ Service
   - references will be set up for individual projects when I start working on them.
 - [x] Add domain abstractions
 - [x] Add documentation for the domain abstractions
-- [ ] Create Collection Domain model
+- Catalogue Context
+  - [ ] Brainstorm on the domain model, What there is, What it does.
+  - [ ] Implement basic functionality of the domain model.
+  - [ ] Write XML documentation to the <b>public</b> members/classes and so on.
+- Collection Context
+- Community Context
+- Identity Context
 - [ ] Rename Customer Context to Profile Context
+- Profile Context
+- [ ] Write a how to run guideline.
+- [ ] Make a documentation
+- [ ] Make some kind of blogpost about the project. Use your notes for that.
