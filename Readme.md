@@ -64,15 +64,20 @@ Service
 ```
 
 ## Notes
-Recommendation Context will be created at the end when everything else is done.<br>
+- Recommendation Context will be created at the end when everything else is done.<br>
 
-Marketplace and its supporting contexts (Order, Customer, Payment) will be added only after Collection, Community, Identity, Catalogue contexts.<br>
+- Marketplace and its supporting contexts (Order, Payment) will be added only after Collection, Community, Identity, Profile, Catalogue contexts.<br>
 
-Use acceptance tests instead of unit tests for the domain model. (Even though they will be in the unit tests project.)
+- Use acceptance tests instead of unit tests for the domain model. (Even though they will be in the unit tests project.)
 
-Use BDD (Behaviour Driven Design) designing tests (Given - When - Then tests)
+- Use BDD (Behaviour Driven Design) designing tests (Given - When - Then tests)
+
+- Add dotnet Aspire.
 
 ## Todo log:
 - [x] Add project references 
   - references will be set up for individual projects when I start working on them.
-- [ ] Add domain abstractions
+- [x] Add domain abstractions
+- [x] Add documentation for the domain abstractions
+- [ ] Create Collection Domain model
+- [ ] Rename Customer Context to Profile Context

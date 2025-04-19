@@ -1,3 +1,6 @@
 ﻿namespace MangaShelf.Domain.Abstractions;
 
-public record ValueObject;
+/// <summary>
+/// Abstract record for a value object type.
+/// </summary>
+public abstract record ValueObject;

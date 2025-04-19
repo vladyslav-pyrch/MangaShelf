@@ -10,8 +10,8 @@ public class EntityTests
     {
         TestEntityId? testEntityId = null;
 
-        Func<TestEntity> when = () => new TestEntity(testEntityId!);
+        Func<TestEntity> creatingEntity = () => new TestEntity(testEntityId!);
 
-        when.Should().Throw<BusinessRuleException>().WithMessage("Id may not be null.");
+        creatingEntity.Should().Throw<BusinessRuleException>().WithMessage("Id may not be null.");
     }
 }
