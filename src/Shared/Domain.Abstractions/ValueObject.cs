@@ -1,6 +1,3 @@
 ﻿namespace MangaShelf.Domain.Abstractions;
 
-public class Class1
-{
-
-}
+public record ValueObject;
