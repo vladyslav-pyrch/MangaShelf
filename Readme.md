@@ -13,7 +13,7 @@ root
 │   │   ├───Catalogue
 │   │   ├───Collection
 │   │   ├───Community
-│   │   ├───Customer
+│   │   ├───Profile
 │   │   ├───Identity
 │   │   ├───Marketplace
 │   │   ├───Order
@@ -30,15 +30,16 @@ root
     ├───ApiGateway
     │   └───Integration
     │
-    ├───Catalogue
-    ├───Collection
-    ├───Community
-    ├───Customer
-    ├───Identity
-    ├───Marketplace
-    ├───Order
-    ├───Payment
-    ├───Recommendation
+    ├───Services
+    │   ├───Catalogue
+    │   ├───Collection
+    │   ├───Community
+    │   ├───Profile
+    │   ├───Identity
+    │   ├───Marketplace
+    │   ├───Order
+    │   ├───Payment
+    │   └───Recommendation
     │
     └───Shared
         ├───Integration
