@@ -1,4 +1,6 @@
 using System.Net;
+using MangaShelf.Catalogue.Application;
+using MangaShelf.Catalogue.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+builder.Services.AddCommands();
+builder.Services.AddCQRS();
 
 var app = builder.Build();
 

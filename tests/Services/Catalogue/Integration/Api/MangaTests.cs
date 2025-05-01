@@ -30,6 +30,10 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
             .WhoseValue.Should().ContainSingle()
             .Which.Should().MatchRegex("^/manga/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$");
 
+        var mangaId = await response.Content.ReadFromJsonAsync<Guid>();
+
+        mangaId.Should().NotBeEmpty();
+
         testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
     }
 }
