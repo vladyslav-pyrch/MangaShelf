@@ -22,9 +22,12 @@ public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatc
     [HttpGet("manga/{id:guid}")]
     public async Task<IActionResult> GetMangaById(Guid id, CancellationToken cancellationToken)
     {
-        MangaDto mangaDto = await queryDispatcher.Dispatch<GetMangaByIdQuery, MangaDto>(
+        MangaDto? mangaDto = await queryDispatcher.Dispatch<GetMangaByIdQuery, MangaDto?>(
             new GetMangaByIdQuery(id), cancellationToken
         );
+
+        if (mangaDto is null)
+            return NotFound();
 
         return Ok(new { mangaDto.Id, mangaDto.Name });
     }

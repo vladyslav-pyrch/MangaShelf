@@ -45,9 +45,20 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
         location.Should().NotBeNull();
 
         var mangaRetrieved = await _httpClient.GetFromJsonAsync<MangaDto>(location);
+
         mangaRetrieved.Should().NotBeNull();
         mangaRetrieved.Id.Should().NotBeEmpty();
         mangaRetrieved.Name.Should().BeEquivalentTo(mangaName);
+    }
+
+    [Fact]
+    public async Task GivenMangaDoesNotExist_WhenRetrievingById()
+    {
+        Guid id = Guid.Parse("1b86f6ae-442a-4f49-acfc-90a173f514a8");
+        var requestUri = $"/manga/{id}";
+
+        using HttpResponseMessage response = await _httpClient.GetAsync(requestUri);
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     private class MangaDto

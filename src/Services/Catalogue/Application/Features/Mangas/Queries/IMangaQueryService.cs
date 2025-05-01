@@ -5,5 +5,5 @@ namespace MangaShelf.Catalogue.Application.Features.Mangas.Queries;
 
 public interface IMangaQueryService
 {
-    public Task<MangaDto> GetMangaById(MangaId mangaId, CancellationToken cancellationToken = default);
+    public Task<MangaDto?> GetMangaById(MangaId mangaId, CancellationToken cancellationToken = default);
 }

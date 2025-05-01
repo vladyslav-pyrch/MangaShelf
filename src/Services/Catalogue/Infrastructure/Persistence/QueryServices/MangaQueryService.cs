@@ -8,13 +8,13 @@ namespace MangaShelf.Catalogue.Infrastructure.Persistence.QueryServices;
 
 public class MangaQueryService(CatalogueDbContext dbContext) : IMangaQueryService
 {
-    public async Task<MangaDto> GetMangaById(MangaId mangaId, CancellationToken cancellationToken = default)
+    public async Task<MangaDto?> GetMangaById(MangaId mangaId, CancellationToken cancellationToken = default)
     {
-        MangaEntity mangaEntity = await dbContext.Mangas.FirstAsync(
+        MangaEntity? mangaEntity = await dbContext.Mangas.FirstOrDefaultAsync(
             entity => entity.Id == mangaId.Value, cancellationToken
         );
 
-        return new MangaDto
+        return mangaEntity is null ? null : new MangaDto
         {
             Id = mangaEntity.Id,
             Name = mangaEntity.Name

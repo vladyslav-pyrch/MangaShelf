@@ -15,6 +15,6 @@ public static class DependencyInjection
 
     public static void AddQueries(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<IQueryHandler<GetMangaByIdQuery, MangaDto>, GetMangaByIdQueryHandler>();
+        serviceCollection.AddScoped<IQueryHandler<GetMangaByIdQuery, MangaDto?>, GetMangaByIdQueryHandler>();
     }
 }
