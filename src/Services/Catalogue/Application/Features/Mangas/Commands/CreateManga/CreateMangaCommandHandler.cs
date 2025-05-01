@@ -3,15 +3,17 @@ using MangaShelf.Catalogue.Domain.Mangas;
 
 namespace MangaShelf.Catalogue.Application.Features.Mangas.Commands.CreateManga;
 
-public class CreateMangaCommandHandler : ICommandHandler<CreateMangaCommand, Guid>
+public class CreateMangaCommandHandler(IMangaRepository mangaRepository) : ICommandHandler<CreateMangaCommand, Guid>
 {
-    public Task<Guid> Handle(CreateMangaCommand command, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateMangaCommand command, CancellationToken cancellationToken)
     {
         string name = command.Name;
-        var id = new MangaId(Guid.NewGuid());
-
+        MangaId id = mangaRepository.GenerateId();
         var manga = Manga.Create(id, name);
 
-        return Task.FromResult(manga.Id.Value);
+        await mangaRepository.Write(manga, cancellationToken);
+        await mangaRepository.Save(cancellationToken);
+
+        return manga.Id.Value;
     }
 }
