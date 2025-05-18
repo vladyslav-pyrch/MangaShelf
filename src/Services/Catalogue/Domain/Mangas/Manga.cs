@@ -15,6 +15,9 @@ public class Manga : AggregateRoot<MangaId>
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(Name));
 
+            if (value.Length > 50)
+                throw new ArgumentException($"{nameof(Name)} should not be longer than 50 characters.", nameof(Name));
+
             _name = value;
         }
     }

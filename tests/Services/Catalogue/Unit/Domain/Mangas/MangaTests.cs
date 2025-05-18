@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Text;
+using FluentAssertions;
 using MangaShelf.Catalogue.Domain.Mangas;
 using Xunit.Abstractions;
 
@@ -45,6 +46,24 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
 
         ArgumentException? which = when.Should().Throw<ArgumentException>().Which;
         which.ParamName.Should().Be(nameof(Manga.Name));
+        testOutputHelper.WriteLine(which.Message);
+    }
+
+    [Fact]
+    public void GivenNameIsLongerThan50Characters_WhenCreatingManga_ThenThrowArgumentException()
+    {
+        var id = new MangaId(Guid.NewGuid());
+        var nameBuilder = new StringBuilder(51, 51);
+        for (var i = 0; i < 5; i++)
+            nameBuilder.Append("1234567890");
+        nameBuilder.Append('1');
+        var name = nameBuilder.ToString();
+
+        Func<Manga> when = () => Manga.Create(id, name);
+
+        ArgumentException? which = when.Should().Throw<ArgumentException>().Which;
+        which.ParamName.Should().Be(nameof(Manga.Name));
+        which.Message.Should().Contain($"{nameof(Manga.Name)} should not be longer than 50 characters.");
         testOutputHelper.WriteLine(which.Message);
     }
 }
