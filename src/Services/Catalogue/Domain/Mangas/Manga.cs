@@ -2,9 +2,22 @@
 
 namespace MangaShelf.Catalogue.Domain.Mangas;
 
-public class Manga(MangaId id, string name) : AggregateRoot<MangaId>(id)
+public class Manga : AggregateRoot<MangaId>
 {
-    public string Name { get; } = name;
+    private readonly string _name = null!;
+
+    public Manga(MangaId id, string name): base(id) => Name = name;
+
+    public string Name
+    {
+        get => _name;
+        private init
+        {
+            ArgumentNullException.ThrowIfNull(value, nameof(Name));
+
+            _name = value;
+        }
+    }
 
     public static Manga Create(MangaId id, string name) => new(id, name);
 }
