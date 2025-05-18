@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using FluentAssertions;
 using MangaShelf.Catalogue.Domain.Mangas;
+using MangaShelf.Domain.Abstractions;
 using Xunit.Abstractions;
 
 namespace MangaShelf.Catalogue.Domain.Tests.Mangas;
@@ -18,9 +19,8 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
         Func<Manga> when = () => Manga.Create(id, name);
 
         // Then
-        ArgumentNullException? which = when.Should().Throw<ArgumentNullException>().Which;
-        which.ParamName.Should().Be(nameof(Manga.Name));
-        testOutputHelper.WriteLine(which.Message);
+        when.Should().Throw<BusinessRuleException>()
+            .Which.Message.Should().Be($"{nameof(Manga.Name)} cannot be null or whitespace.");
     }
 
     [Fact]
@@ -31,9 +31,8 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
 
         Func<Manga> when = () => Manga.Create(id, name);
 
-        ArgumentException? which = when.Should().Throw<ArgumentException>().Which;
-        which.ParamName.Should().Be(nameof(Manga.Name));
-        testOutputHelper.WriteLine(which.Message);
+        when.Should().Throw<BusinessRuleException>()
+            .Which.Message.Should().Be($"{nameof(Manga.Name)} cannot be null or whitespace.");
     }
 
     [Fact]
@@ -44,9 +43,8 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
 
         Func<Manga> when = () => Manga.Create(id, name);
 
-        ArgumentException? which = when.Should().Throw<ArgumentException>().Which;
-        which.ParamName.Should().Be(nameof(Manga.Name));
-        testOutputHelper.WriteLine(which.Message);
+        when.Should().Throw<BusinessRuleException>()
+            .Which.Message.Should().Be($"{nameof(Manga.Name)} cannot be null or whitespace.");
     }
 
     [Fact]
@@ -61,9 +59,9 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
 
         Func<Manga> when = () => Manga.Create(id, name);
 
-        ArgumentException? which = when.Should().Throw<ArgumentException>().Which;
-        which.ParamName.Should().Be(nameof(Manga.Name));
-        which.Message.Should().Contain($"{nameof(Manga.Name)} should not be longer than 50 characters.");
+        BusinessRuleException? which = when.Should().Throw<BusinessRuleException>().Which;
+        which.Message.Should().Be($"{nameof(Manga.Name)} should not be longer than 50 characters.");
         testOutputHelper.WriteLine(which.Message);
+
     }
 }

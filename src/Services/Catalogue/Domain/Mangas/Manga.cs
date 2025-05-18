@@ -13,10 +13,10 @@ public class Manga : AggregateRoot<MangaId>
         get => _name;
         private init
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(Name));
+            BusinessRuleException.ThrowIfNullOrWhiteSpace(value, $"{nameof(Name)} cannot be null or whitespace.");
 
             if (value.Length > 50)
-                throw new ArgumentException($"{nameof(Name)} should not be longer than 50 characters.", nameof(Name));
+                throw new BusinessRuleException($"{nameof(Name)} should not be longer than 50 characters.");
 
             _name = value;
         }
