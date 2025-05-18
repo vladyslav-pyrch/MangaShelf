@@ -3,10 +3,12 @@ using FluentValidation.TestHelper;
 using MangaShelf.Application.Abstractions;
 using MangaShelf.Catalogue.Api.Extensions;
 using MangaShelf.Catalogue.Api.Mangas.Requests;
+using MangaShelf.Catalogue.Api.Mangas.Responses;
 using MangaShelf.Catalogue.Application.Features.Mangas.Commands.CreateManga;
 using MangaShelf.Catalogue.Application.Features.Mangas.Dtos;
 using MangaShelf.Catalogue.Application.Features.Mangas.Queries.GetMangaById;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace MangaShelf.Catalogue.Api.Mangas;
 
@@ -14,6 +16,8 @@ namespace MangaShelf.Catalogue.Api.Mangas;
 public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : ControllerBase
 {
     [HttpPost("create-manga")]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ModelStateDictionary), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateManga([FromBody] CreateMangaRequest createManga,
         [FromServices] IValidator<CreateMangaRequest> validator,
         CancellationToken cancellationToken)
@@ -31,6 +35,8 @@ public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatc
     }
 
     [HttpGet("manga/{id:guid}")]
+    [ProducesResponseType(typeof(GetMangaByIdResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetMangaById(Guid id, CancellationToken cancellationToken)
     {
         MangaDto? mangaDto = await queryDispatcher.Dispatch<GetMangaByIdQuery, MangaDto?>(
@@ -40,6 +46,6 @@ public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatc
         if (mangaDto is null)
             return NotFound();
 
-        return Ok(new { mangaDto.Id, mangaDto.Name });
+        return Ok(new GetMangaByIdResponse{Id = mangaDto.Id, Name = mangaDto.Name});
     }
 }
