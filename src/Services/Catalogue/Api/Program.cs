@@ -1,4 +1,6 @@
 using System.Net;
+using System.Runtime.CompilerServices;
+using FluentValidation;
 using MangaShelf.Catalogue.Application;
 using MangaShelf.Catalogue.Infrastructure;
 
@@ -13,6 +15,7 @@ builder.Services.AddCommands();
 builder.Services.AddQueries();
 builder.Services.AddCqrs();
 builder.Services.AddPersistence();
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 var app = builder.Build();
 

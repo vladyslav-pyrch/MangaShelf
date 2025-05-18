@@ -1,4 +1,8 @@
-﻿using MangaShelf.Application.Abstractions;
+﻿using FluentValidation;
+using FluentValidation.TestHelper;
+using MangaShelf.Application.Abstractions;
+using MangaShelf.Catalogue.Api.Extensions;
+using MangaShelf.Catalogue.Api.Mangas.Requests;
 using MangaShelf.Catalogue.Application.Features.Mangas.Commands.CreateManga;
 using MangaShelf.Catalogue.Application.Features.Mangas.Dtos;
 using MangaShelf.Catalogue.Application.Features.Mangas.Queries.GetMangaById;
@@ -10,8 +14,15 @@ namespace MangaShelf.Catalogue.Api.Mangas;
 public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : ControllerBase
 {
     [HttpPost("create-manga")]
-    public async Task<IActionResult> CreateManga([FromBody] CreateMangaDto createManga, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateManga([FromBody] CreateMangaRequest createManga,
+        [FromServices] IValidator<CreateMangaRequest> validator,
+        CancellationToken cancellationToken)
     {
+        await validator.ValidateAsync(createManga, ModelState, cancellationToken);
+
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         Guid id = await commandDispatcher.Dispatch<CreateMangaCommand, Guid>(
             new CreateMangaCommand(createManga.Name), cancellationToken
         );
