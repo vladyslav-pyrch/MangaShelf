@@ -34,4 +34,17 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
         which.ParamName.Should().Be(nameof(Manga.Name));
         testOutputHelper.WriteLine(which.Message);
     }
+
+    [Fact]
+    public void GivenNameIsWhiteSpace_WhenCreatingManga_ThenThrowArgumentException()
+    {
+        var id = new MangaId(Guid.NewGuid());
+        var name = "   ";
+
+        Func<Manga> when = () => Manga.Create(id, name);
+
+        ArgumentException? which = when.Should().Throw<ArgumentException>().Which;
+        which.ParamName.Should().Be(nameof(Manga.Name));
+        testOutputHelper.WriteLine(which.Message);
+    }
 }
