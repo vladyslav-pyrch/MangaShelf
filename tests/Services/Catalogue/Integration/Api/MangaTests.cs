@@ -50,6 +50,19 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     }
 
     [Fact]
+    public async Task GivenNameIsEmpty_WhenCreatingManga()
+    {
+        //Given
+        var manga = new { Name = string.Empty };
+
+        //When
+        HttpResponseMessage request = await _httpClient.PostAsJsonAsync("create-manga", manga);
+
+        //Then
+        request.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
     public async Task GivenMangaWasCreated_WhenRetrievingById()
     {
         //Given
