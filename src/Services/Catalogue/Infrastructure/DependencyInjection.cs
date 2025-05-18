@@ -27,4 +27,10 @@ public static class DependencyInjection
         serviceCollection.AddScoped<IMangaRepository, MangaRepository>();
         serviceCollection.AddScoped<IMangaQueryService, MangaQueryService>();
     }
+
+    public static void AddInfrastructure(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddCqrs();
+        serviceCollection.AddPersistence();
+    }
 }

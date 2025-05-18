@@ -11,11 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 
-builder.Services.AddCommands();
-builder.Services.AddQueries();
-builder.Services.AddCqrs();
-builder.Services.AddPersistence();
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 
