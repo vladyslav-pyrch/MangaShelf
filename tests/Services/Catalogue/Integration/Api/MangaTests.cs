@@ -60,6 +60,7 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
 
         //Then
         request.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        testOutputHelper.WriteLine(await request.Content.ReadAsStringAsync());
     }
 
     [Fact]
