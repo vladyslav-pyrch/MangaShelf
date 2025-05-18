@@ -13,7 +13,7 @@ public class Manga : AggregateRoot<MangaId>
         get => _name;
         private init
         {
-            ArgumentNullException.ThrowIfNull(value, nameof(Name));
+            ArgumentException.ThrowIfNullOrEmpty(value, nameof(Name));
 
             _name = value;
         }
