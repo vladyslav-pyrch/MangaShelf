@@ -11,7 +11,7 @@ public static class DependencyInjection
 {
     public static void AddCommands(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<ICommandHandler<CreateMangaCommand, Guid>, CreateMangaCommandHandler>();
+        serviceCollection.AddScoped<ICommandHandler<CreateMangaCommand, Result<Guid>>, CreateMangaCommandHandler>();
     }
 
     public static void AddQueries(this IServiceCollection serviceCollection)

@@ -27,11 +27,11 @@ public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatc
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        Guid id = await commandDispatcher.Dispatch<CreateMangaCommand, Guid>(
+        Result<Guid> id = await commandDispatcher.Dispatch<CreateMangaCommand, Result<Guid>>(
             new CreateMangaCommand(createManga.Name), cancellationToken
         );
 
-        return Created($"/manga/{id}", id);
+        return Created($"/manga/{id.Value}", id.Value);
     }
 
     [HttpGet("manga/{id:guid}")]

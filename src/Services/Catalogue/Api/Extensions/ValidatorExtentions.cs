@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace MangaShelf.Catalogue.Api.Extensions;
 
-public static class ValidatorExtensions
+public static class ValidationExtensions
 {
     public static void MoveToModelStateDictionary(this ValidationResult validationResult,
         ModelStateDictionary modelStateDictionary)
