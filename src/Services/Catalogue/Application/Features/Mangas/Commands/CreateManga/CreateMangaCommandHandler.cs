@@ -12,6 +12,7 @@ public class CreateMangaCommandHandler(IMangaRepository mangaRepository, IValida
     public async Task<Result<Guid>> Handle(CreateMangaCommand command, CancellationToken cancellationToken)
     {
         ValidationResult result = await validator.ValidateAsync(command, cancellationToken);
+        await validator.ValidateAndThrowAsync(command, cancellationToken);
 
         if (!result.IsValid)
             return result.ToFailure<Guid>();

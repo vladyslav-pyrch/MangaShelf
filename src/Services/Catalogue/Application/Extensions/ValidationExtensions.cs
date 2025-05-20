@@ -7,7 +7,10 @@ public static class ValidationExtensions
 {
     public static Result<T> ToFailure<T>(this ValidationResult result)
     {
-        string[] errors = result.Errors.Select(error => error.ErrorMessage).ToArray();
-        return Result<T>.Failure(string.Join(Environment.NewLine, errors));
+        if (result.IsValid)
+            throw new ArgumentException("Validation result should not be valid to be converted to Result<T>.Failure.");
+
+        Error[] errors = result.Errors.Select(error => new Error(error.ErrorCode, error.ErrorMessage)).ToArray();
+        return Result<T>.Failure(errors);
     }
 }
