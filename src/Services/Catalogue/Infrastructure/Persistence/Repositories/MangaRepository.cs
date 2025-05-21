@@ -14,19 +14,24 @@ public class MangaRepository(CatalogueDbContext dbContext) : IMangaRepository
 
         NotFoundException.ThrowIfNull(mangaEntity);
 
-        var mangaId = new MangaId(mangaEntity.Id);
-        string name = mangaEntity.Name;
-        var manga = new Manga(mangaId, name);
+        var manga = new Manga(
+            new MangaId(mangaEntity.Id),
+            mangaEntity.Name,
+            new Author(mangaEntity.AuthorId),
+            mangaEntity.Description
+        );
 
         return manga;
     }
 
     public async Task Write(Manga manga, CancellationToken cancellationToken = default)
     {
-        var mangaEntity = new MangaEntity()
+        var mangaEntity = new MangaEntity
         {
             Id = manga.Id.Value,
-            Name = manga.Name
+            Name = manga.Name,
+            AuthorId = manga.Author.Id,
+            Description = manga.Description
         };
 
         await dbContext.Mangas.AddAsync(mangaEntity, cancellationToken);

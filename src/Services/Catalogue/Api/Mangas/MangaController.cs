@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using FluentValidation.TestHelper;
 using MangaShelf.Application.Abstractions;
 using MangaShelf.Catalogue.Api.Extensions;
 using MangaShelf.Catalogue.Api.Mangas.Requests;
@@ -28,7 +27,7 @@ public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatc
             return BadRequest(ModelState);
 
         Result<Guid> id = await commandDispatcher.Dispatch<CreateMangaCommand, Result<Guid>>(
-            new CreateMangaCommand(createManga.Name), cancellationToken
+            new CreateMangaCommand(createManga.Name, createManga.AuthorId), cancellationToken
         );
 
         return Created($"/manga/{id.Value}", id.Value);
@@ -46,6 +45,19 @@ public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatc
         if (mangaDto is null)
             return NotFound();
 
-        return Ok(new GetMangaByIdResponse{Id = mangaDto.Id, Name = mangaDto.Name});
+        return Ok(new GetMangaByIdResponse
+        {
+            Id = mangaDto.Id,
+            Name = mangaDto.Name,
+            AuthorId = mangaDto.AuthorId,
+            Description = mangaDto.Description
+        });
+    }
+
+    [HttpPut("manga/{id:guid}/change-description")]
+    public async Task<IActionResult> ChangeDescription([FromRoute] Guid id, [FromBody] string description,
+        CancellationToken cancellationToken)
+    {
+        return NoContent();
     }
 }

@@ -19,7 +19,9 @@ public class CreateMangaCommandHandler(IMangaRepository mangaRepository, IValida
 
         string name = command.Name;
         MangaId id = mangaRepository.GenerateId();
-        var manga = Manga.Create(id, name);
+        var author = new Author(command.AuthorId);
+
+        var manga = Manga.Create(id, name, author);
 
         await mangaRepository.Write(manga, cancellationToken);
         await mangaRepository.Save(cancellationToken);

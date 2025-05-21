@@ -8,15 +8,20 @@ namespace MangaShelf.Catalogue.Domain.Tests.Mangas;
 
 public class MangaTests(ITestOutputHelper testOutputHelper)
 {
+    private MangaId _id = new(Guid.NewGuid());
+
+    private string _name = "Some name";
+
+    private Author _author = new("Author");
+
     [Fact]
     public void GivenNameIsNull_WhenCreatingManga_ThenThrowArgumentNullException()
     {
         // Given
-        var id = new MangaId(Guid.NewGuid());
-        string name = null!;
+        _name = null!;
 
         // When
-        Func<Manga> when = () => Manga.Create(id, name);
+        Func<Manga> when = () => Manga.Create(_id, _name, _author);
 
         // Then
         when.Should().Throw<BusinessRuleException>()
@@ -26,10 +31,9 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void GivenNameIsEmpty_WhenCreatingManga_ThenThrowArgumentException()
     {
-        var id = new MangaId(Guid.NewGuid());
-        var name = string.Empty;
+        _name = string.Empty;
 
-        Func<Manga> when = () => Manga.Create(id, name);
+        Func<Manga> when = () => Manga.Create(_id, _name, _author);
 
         when.Should().Throw<BusinessRuleException>()
             .Which.Message.Should().Be($"{nameof(Manga.Name)} cannot be null or whitespace.");
@@ -38,10 +42,9 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void GivenNameIsWhiteSpace_WhenCreatingManga_ThenThrowArgumentException()
     {
-        var id = new MangaId(Guid.NewGuid());
-        var name = "   ";
+        _name = "   ";
 
-        Func<Manga> when = () => Manga.Create(id, name);
+        Func<Manga> when = () => Manga.Create(_id, _name, _author);
 
         when.Should().Throw<BusinessRuleException>()
             .Which.Message.Should().Be($"{nameof(Manga.Name)} cannot be null or whitespace.");
@@ -50,18 +53,12 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public void GivenNameIsLongerThan50Characters_WhenCreatingManga_ThenThrowArgumentException()
     {
-        var id = new MangaId(Guid.NewGuid());
-        var nameBuilder = new StringBuilder(51, 51);
-        for (var i = 0; i < 5; i++)
-            nameBuilder.Append("1234567890");
-        nameBuilder.Append('1');
-        var name = nameBuilder.ToString();
+        _name = new string('a', 51);
 
-        Func<Manga> when = () => Manga.Create(id, name);
+        Func<Manga> when = () => Manga.Create(_id, _name, _author);
 
         BusinessRuleException? which = when.Should().Throw<BusinessRuleException>().Which;
         which.Message.Should().Be($"{nameof(Manga.Name)} should not be longer than 50 characters.");
         testOutputHelper.WriteLine(which.Message);
-
     }
 }

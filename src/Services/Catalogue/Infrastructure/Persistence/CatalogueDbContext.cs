@@ -21,5 +21,9 @@ public class CatalogueDbContext(DbContextOptions<CatalogueDbContext> options) : 
         modelBuilder.Entity<MangaEntity>()
             .Property(entity => entity.Name)
             .IsRequired();
+
+        modelBuilder.Entity<MangaEntity>()
+            .Property(entity => entity.AuthorId)
+            .IsRequired();
     }
 }

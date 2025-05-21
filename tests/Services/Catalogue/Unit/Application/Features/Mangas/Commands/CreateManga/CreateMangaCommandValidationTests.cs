@@ -15,7 +15,7 @@ public class CreateMangaCommandValidationTests
     public async Task GivenNameIsLongerThan50Characters_WhenValidating()
     {
         var name = new string('a', 51);
-        var command = new CreateMangaCommand(name);
+        var command = new CreateMangaCommand(name, "gaegw");
 
         ValidationResult result = await _validator.ValidateAsync(command);
         Result<Unit> failure = result.ToFailure<Unit>();
@@ -28,7 +28,7 @@ public class CreateMangaCommandValidationTests
     public async Task GivenEmptyName_WhenValidating()
     {
         var name = string.Empty;
-        var command = new CreateMangaCommand(name);
+        var command = new CreateMangaCommand(name, "gaeweag");
 
         ValidationResult result = await _validator.ValidateAsync(command);
         Result<Unit> failure = result.ToFailure<Unit>();

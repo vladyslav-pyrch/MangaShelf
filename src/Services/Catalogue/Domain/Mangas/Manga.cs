@@ -6,7 +6,16 @@ public class Manga : AggregateRoot<MangaId>
 {
     private readonly string _name = null!;
 
-    public Manga(MangaId id, string name): base(id) => Name = name;
+    private readonly Author _author = null!;
+
+    private string _description = null!;
+
+    public Manga(MangaId id, string name, Author author, string description): base(id)
+    {
+        Name = name;
+        Author = author;
+        Description = description;
+    }
 
     public string Name
     {
@@ -22,5 +31,17 @@ public class Manga : AggregateRoot<MangaId>
         }
     }
 
-    public static Manga Create(MangaId id, string name) => new(id, name);
+    public Author Author
+    {
+        get => _author;
+        private init => _author = value;
+    }
+
+    public string Description
+    {
+        get => _description;
+        private set => _description = value;
+    }
+
+    public static Manga Create(MangaId id, string name, Author author) => new(id, name, author, "");
 }

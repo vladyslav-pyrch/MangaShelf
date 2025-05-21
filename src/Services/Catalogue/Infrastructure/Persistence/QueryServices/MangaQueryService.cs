@@ -17,7 +17,9 @@ public class MangaQueryService(CatalogueDbContext dbContext) : IMangaQueryServic
         return mangaEntity is null ? null : new MangaDto
         {
             Id = mangaEntity.Id,
-            Name = mangaEntity.Name
+            Name = mangaEntity.Name,
+            Description = mangaEntity.Description,
+            AuthorId = mangaEntity.AuthorId
         };
     }
 }
