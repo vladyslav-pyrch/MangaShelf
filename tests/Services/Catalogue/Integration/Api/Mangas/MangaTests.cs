@@ -107,6 +107,22 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     }
 
     [Fact]
+    public async Task GivenOwnerIdIsNull_WhenCreatingManga()
+    {
+        var manga = new
+        {
+            Name = "Title",
+            OwnerId = string.Empty
+        };
+        manga = manga with { OwnerId = null };
+
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-manga", manga);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
+    }
+
+    [Fact]
     public async Task GivenMangaWasCreated_WhenRetrievingById()
     {
         //Given
