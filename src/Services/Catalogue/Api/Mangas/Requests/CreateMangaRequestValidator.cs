@@ -9,5 +9,8 @@ public class CreateMangaRequestValidator : AbstractValidator<CreateMangaRequest>
         RuleFor(request => request.Name)
             .NotEmpty().WithMessage($"{nameof(CreateMangaRequest.Name)} is required.")
             .MaximumLength(50).WithMessage($"{nameof(CreateMangaRequest.Name)} must not exceed 50 characters.");
+
+        RuleFor(request => request.OwnerId)
+            .NotEmpty().WithMessage($"{nameof(CreateMangaRequest.OwnerId)} is required.");
     }
 }

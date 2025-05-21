@@ -4,7 +4,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit.Abstractions;
 
-namespace MangaShelf.Catalogue.Api.IntegrationTests;
+namespace MangaShelf.Catalogue.Api.IntegrationTests.Mangas;
 
 public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, ITestOutputHelper testOutputHelper)
     : IClassFixture<WebApplicationFactory<Program>>
@@ -18,10 +18,15 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     public async Task GivenName_WhenCreatingManga(string name)
     {
         //Given
-        var manga = new { Name = name };
+        var createManga = new
+        {
+            Name = name,
+            OwnerId = "any-nonempty-string"
+        };
 
         //When
-        using HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-manga", manga);
+        using HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-manga", createManga);
+        testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
 
         //Then
         response.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -38,7 +43,11 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     public async Task GivenNameIsNull_WhenCreatingManga()
     {
         //Given
-        var manga = new { Name = "" };
+        var manga = new
+        {
+            Name = "",
+            OwnerId = "any-nonempty-string"
+        };
         manga = manga with { Name = null };
         
         //When
@@ -53,14 +62,48 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     public async Task GivenNameIsEmpty_WhenCreatingManga()
     {
         //Given
-        var manga = new { Name = string.Empty };
+        var manga = new
+        {
+            Name = string.Empty,
+            OwnerId = "any-nonempty-string"
+        };
 
         //When
-        HttpResponseMessage request = await _httpClient.PostAsJsonAsync("create-manga", manga);
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-manga", manga);
 
         //Then
-        request.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        testOutputHelper.WriteLine(await request.Content.ReadAsStringAsync());
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
+    }
+
+    [Fact]
+    public async Task GivenNameIsLongerThan50Characters_WhenCreatingManga()
+    {
+        var manga = new
+        {
+            Name = new string('a', 51),
+            OwnerId = "any-nonempty-string"
+        };
+
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-manga", manga);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
+    }
+
+    [Fact]
+    public async Task GivenOwnerIdIsEmpty_WhenCreatingManga()
+    {
+        var manga = new
+        {
+            Name = "Title",
+            OwnerId = string.Empty
+        };
+
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-manga", manga);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
     }
 
     [Fact]
@@ -68,7 +111,11 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     {
         //Given
         const string mangaName = "Some manga title";
-        var manga = new { Name = mangaName };
+        var manga = new
+        {
+            Name = mangaName,
+            OwnerId = "any-nonempty-string"
+        };
 
         using HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-manga", manga);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
