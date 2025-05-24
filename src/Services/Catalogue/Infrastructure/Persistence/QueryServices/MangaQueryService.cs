@@ -10,7 +10,7 @@ public class MangaQueryService(CatalogueDbContext dbContext) : IMangaQueryServic
 {
     public async Task<MangaDto?> GetMangaById(MangaId mangaId, CancellationToken cancellationToken = default)
     {
-        MangaEntity? mangaEntity = await dbContext.Mangas.FirstOrDefaultAsync(
+        MangaEntity? mangaEntity = await dbContext.Mangas.AsNoTracking().FirstOrDefaultAsync(
             entity => entity.Id == mangaId.Value, cancellationToken
         );
 

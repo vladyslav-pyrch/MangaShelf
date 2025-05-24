@@ -15,7 +15,7 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
     private Author _author = new("Author");
 
     [Fact]
-    public void GivenNameIsNull_WhenCreatingManga_ThenThrowArgumentNullException()
+    public void GivenNameIsNull_WhenCreatingManga_ThenThrowBusinessRuleException()
     {
         // Given
         _name = null!;
@@ -29,7 +29,7 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void GivenNameIsEmpty_WhenCreatingManga_ThenThrowArgumentException()
+    public void GivenNameIsEmpty_WhenCreatingManga_ThenThrowBusinessRuleException()
     {
         _name = string.Empty;
 
@@ -40,7 +40,7 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void GivenNameIsWhiteSpace_WhenCreatingManga_ThenThrowArgumentException()
+    public void GivenNameIsWhiteSpace_WhenCreatingManga_ThenThrowBusinessRuleException()
     {
         _name = "   ";
 
@@ -51,7 +51,7 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    public void GivenNameIsLongerThan50Characters_WhenCreatingManga_ThenThrowArgumentException()
+    public void GivenNameIsLongerThan50Characters_WhenCreatingManga_ThenThrowBusinessRuleException()
     {
         _name = new string('a', 51);
 
@@ -60,5 +60,25 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
         BusinessRuleException? which = when.Should().Throw<BusinessRuleException>().Which;
         which.Message.Should().Be($"{nameof(Manga.Name)} should not be longer than 50 characters.");
         testOutputHelper.WriteLine(which.Message);
+    }
+
+    [Fact]
+    public void GivenDescription_WhenChangingDescription_ThenDescriptionChanged()
+    {
+        var manga = Manga.Create(_id, _name, _author);
+
+        manga.ChangeDescription("Some description");
+
+        manga.Description.Should().BeEquivalentTo("Some description");
+    }
+
+    [Fact]
+    public void GivenDescriptionIsNull_WhenChangingDescription_ThenThrowsBusinessRuleException()
+    {
+        var manga = Manga.Create(_id, _name, _author);
+
+        Action when = () => manga.ChangeDescription(null!);
+
+        when.Should().Throw<BusinessRuleException>();
     }
 }

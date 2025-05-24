@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MangaShelf.Application.Abstractions;
+using MangaShelf.Catalogue.Application.Features.Mangas.Commands.ChangeDescription;
 using MangaShelf.Catalogue.Application.Features.Mangas.Commands.CreateManga;
 using MangaShelf.Catalogue.Application.Features.Mangas.Dtos;
 using MangaShelf.Catalogue.Application.Features.Mangas.Queries.GetMangaById;
@@ -12,6 +13,8 @@ public static class DependencyInjection
     public static void AddCommands(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<ICommandHandler<CreateMangaCommand, Result<Guid>>, CreateMangaCommandHandler>();
+        serviceCollection
+            .AddScoped<ICommandHandler<ChangeDescriptionCommand, Result<Unit>>, ChangeDescriptionCommandHandler>();
     }
 
     public static void AddQueries(this IServiceCollection serviceCollection)

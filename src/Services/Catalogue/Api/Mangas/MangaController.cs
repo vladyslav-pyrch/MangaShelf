@@ -3,6 +3,7 @@ using MangaShelf.Application.Abstractions;
 using MangaShelf.Catalogue.Api.Extensions;
 using MangaShelf.Catalogue.Api.Mangas.Requests;
 using MangaShelf.Catalogue.Api.Mangas.Responses;
+using MangaShelf.Catalogue.Application.Features.Mangas.Commands.ChangeDescription;
 using MangaShelf.Catalogue.Application.Features.Mangas.Commands.CreateManga;
 using MangaShelf.Catalogue.Application.Features.Mangas.Dtos;
 using MangaShelf.Catalogue.Application.Features.Mangas.Queries.GetMangaById;
@@ -58,6 +59,10 @@ public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatc
     public async Task<IActionResult> ChangeDescription([FromRoute] Guid id, [FromBody] string description,
         CancellationToken cancellationToken)
     {
+        Result<Unit> _ = await commandDispatcher.Dispatch<ChangeDescriptionCommand, Result<Unit>>(
+            new ChangeDescriptionCommand(id, description), cancellationToken
+        );
+
         return NoContent();
     }
 }

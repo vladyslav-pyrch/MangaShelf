@@ -1,6 +1,7 @@
 ﻿using MangaShelf.Catalogue.Application.Exceptions;
 using MangaShelf.Catalogue.Domain.Mangas;
 using MangaShelf.Catalogue.Infrastructure.Persistence.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace MangaShelf.Catalogue.Infrastructure.Persistence.Repositories;
 
@@ -10,7 +11,8 @@ public class MangaRepository(CatalogueDbContext dbContext) : IMangaRepository
 
     public async Task<Manga> Read(MangaId id, CancellationToken cancellationToken = default)
     {
-        MangaEntity? mangaEntity = await dbContext.Mangas.FindAsync([id.Value], cancellationToken: cancellationToken);
+        MangaEntity? mangaEntity = await dbContext.Mangas.AsNoTracking()
+            .FirstOrDefaultAsync(entity => entity.Id == id.Value, cancellationToken);
 
         NotFoundException.ThrowIfNull(mangaEntity);
 
@@ -34,7 +36,10 @@ public class MangaRepository(CatalogueDbContext dbContext) : IMangaRepository
             Description = manga.Description
         };
 
-        await dbContext.Mangas.AddAsync(mangaEntity, cancellationToken);
+        if (dbContext.Mangas.AsNoTracking().Any(entity => entity.Id == mangaEntity.Id))
+            dbContext.Mangas.Update(mangaEntity);
+        else
+            await dbContext.Mangas.AddAsync(mangaEntity, cancellationToken);
     }
 
     public Task Save(CancellationToken cancellationToken = default) => dbContext.SaveChangesAsync(cancellationToken);

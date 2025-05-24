@@ -166,14 +166,14 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     }
 
     [Fact]
-    public async Task GivenDescription_WhenAddingDescription()
+    public async Task GivenDescription_WhenChangingDescription()
     {
         var manga = new
         {
             Name = "Some manga title",
             AuthorId = "any-nonempty-string"
         };
-        var description = "A description of a manga.";
+        const string description = "A description of a manga.";
 
         using HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-manga", manga);
         var magnaId = await response.Content.ReadFromJsonAsync<Guid>();

@@ -40,8 +40,15 @@ public class Manga : AggregateRoot<MangaId>
     public string Description
     {
         get => _description;
-        private set => _description = value;
+        private set
+        {
+            BusinessRuleException.ThrowIfNull(value, $"{nameof(Description)} cannot be null.");
+
+            _description = value;
+        }
     }
 
     public static Manga Create(MangaId id, string name, Author author) => new(id, name, author, "");
+
+    public void ChangeDescription(string description) => Description = description;
 }
