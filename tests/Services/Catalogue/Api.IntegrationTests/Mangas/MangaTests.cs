@@ -170,15 +170,39 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     public async Task GivenDescription_WhenChangingDescription()
     {
         const string description = "A description of a manga.";
+        var changeDescription = new
+        {
+            Description = description
+        };
         Guid magnaId = await CreateManga();
 
-        using HttpResponseMessage response2 = await _httpClient.PutAsJsonAsync($"manga/{magnaId}/change-description", description);
+        using HttpResponseMessage response2 = await _httpClient.PutAsJsonAsync(
+            $"manga/{magnaId}/change-description", changeDescription
+        );
+
         response2.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         var magna = await _httpClient.GetFromJsonAsync<MangaDto>($"manga/{magnaId}");
 
         magna.Should().NotBeNull();
         magna.Description.Should().BeEquivalentTo(description);
+    }
+
+    [Fact]
+    public async Task GivenDescriptionIsLongerThan5000Characters_WhenChangingDescription()
+    {
+        var changeDescription = new
+        {
+            Description = new string('1', 5001)
+        };
+        Guid mangaId = await CreateManga();
+
+        using HttpResponseMessage response = await _httpClient.PutAsJsonAsync(
+            $"manga/{mangaId}/change-description", changeDescription
+        );
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
     }
 
     [Fact]

@@ -57,17 +57,25 @@ public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatc
 
     [HttpPut("manga/{id:guid}/change-description")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> ChangeDescription([FromRoute] Guid id, [FromBody] string description,
-        CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ModelStateDictionary), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ChangeDescription([FromRoute] Guid id, [FromBody] ChangeDescriptionRequest request,
+        IValidator<ChangeDescriptionRequest> validator, CancellationToken cancellationToken)
     {
+        await validator.ValidateAsync(request, ModelState, cancellationToken);
+
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         Result<Unit> _ = await commandDispatcher.Dispatch<ChangeDescriptionCommand, Result<Unit>>(
-            new ChangeDescriptionCommand(id, description), cancellationToken
+            new ChangeDescriptionCommand(id, request.Description), cancellationToken
         );
 
         return NoContent();
     }
 
     [HttpPost("manga/{id:guid}/add-volume")]
+    [ProducesResponseType(typeof(Guid),StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ModelStateDictionary), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> AddVolume([FromRoute] Guid id, [FromBody] AddVolumeRequest addVolume,
         IValidator<AddVolumeRequest> validator, CancellationToken cancellationToken)
     {
