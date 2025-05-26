@@ -1,5 +1,4 @@
-﻿using System.Text;
-using FluentAssertions;
+﻿using FluentAssertions;
 using MangaShelf.Catalogue.Domain.Mangas;
 using MangaShelf.Domain.Abstractions;
 using Xunit.Abstractions;
@@ -89,6 +88,16 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
         string description = new('a', 5001);
 
         Action when = () => manga.ChangeDescription(description);
+
+        when.Should().Throw<BusinessRuleException>();
+    }
+
+    [Fact]
+    public void GivenAuthorIsNull_WhenCreatingManga_ThenThrowBusinessRuleException()
+    {
+        _author = null!;
+
+        Action when = () => Manga.Create(_id, _name, _author);
 
         when.Should().Throw<BusinessRuleException>();
     }

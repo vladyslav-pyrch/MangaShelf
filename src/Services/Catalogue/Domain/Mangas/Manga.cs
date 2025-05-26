@@ -34,7 +34,12 @@ public class Manga : AggregateRoot<MangaId>
     public Author Author
     {
         get => _author;
-        private init => _author = value;
+        private init
+        {
+            BusinessRuleException.ThrowIfNull(value, $"{nameof(Author)} cannot be null.");
+
+            _author = value;
+        }
     }
 
     public string Description
