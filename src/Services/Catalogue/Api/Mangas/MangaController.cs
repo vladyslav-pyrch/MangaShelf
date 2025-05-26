@@ -69,8 +69,13 @@ public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatc
 
     [HttpPost("manga/{id:guid}/add-volume")]
     public async Task<IActionResult> AddVolume([FromRoute] Guid id, [FromBody] AddVolumeRequest addVolume,
-        CancellationToken cancellationToken)
+        IValidator<AddVolumeRequest> validator, CancellationToken cancellationToken)
     {
+        await validator.ValidateAsync(addVolume, ModelState, cancellationToken);
+
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         var volumeId = Guid.CreateVersion7();
 
         return Created($"/manga/{id}/volume/{Guid.CreateVersion7()}", volumeId);

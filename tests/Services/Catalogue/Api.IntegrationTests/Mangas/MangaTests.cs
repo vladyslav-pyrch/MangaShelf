@@ -169,15 +169,8 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     [Fact]
     public async Task GivenDescription_WhenChangingDescription()
     {
-        var manga = new
-        {
-            Name = "Some manga title",
-            AuthorId = "any-nonempty-string"
-        };
         const string description = "A description of a manga.";
-
-        using HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-manga", manga);
-        var magnaId = await response.Content.ReadFromJsonAsync<Guid>();
+        Guid magnaId = await CreateManga();
 
         using HttpResponseMessage response2 = await _httpClient.PutAsJsonAsync($"manga/{magnaId}/change-description", description);
         response2.StatusCode.Should().Be(HttpStatusCode.NoContent);
@@ -189,21 +182,13 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     }
 
     [Fact]
-    public async Task GivenVolumeNameAndOrder_WhenAddingVolume()
+    public async Task GivenVolumeName_WhenAddingVolume()
     {
-        var manga = new
-        {
-            Name = "Some manga title",
-            AuthorId = "any-nonempty-string",
-        };
-
-        using HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-manga", manga);
-        var magnaId = await response.Content.ReadFromJsonAsync<Guid>();
+        Guid magnaId = await CreateManga();
 
         var volume = new
         {
-            Name = "Some volume name",
-            Order = 1
+            Name = "Some volume name"
         };
 
         using HttpResponseMessage response2 = await _httpClient.PostAsJsonAsync($"manga/{magnaId}/add-volume", volume);
@@ -212,6 +197,54 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
         response2.Headers.Location.Should().NotBeNull();
         var volumeId = await response2.Content.ReadFromJsonAsync<Guid>();
         volumeId.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public async Task GivenVolumeNameIsNull_WhenAddingVolume()
+    {
+        Guid magnaId = await CreateManga();
+
+        var volume = new
+        {
+            Name = "Some volume name"
+        };
+
+        volume = volume with { Name = null };
+
+        using HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"manga/{magnaId}/add-volume", volume);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
+
+    }
+
+    [Fact]
+    public async Task GivenVolumeNameIsEmpty_WhenAddingVolume()
+    {
+        Guid magnaId = await CreateManga();
+
+        var volume = new
+        {
+            Name = string.Empty
+        };
+
+        using HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"manga/{magnaId}/add-volume", volume);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
+
+    }
+
+    private async Task<Guid> CreateManga()
+    {
+        var manga = new
+        {
+            Name = "Some manga title",
+            AuthorId = "any-nonempty-string",
+        };
+
+        using HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-manga", manga);
+        return await response.Content.ReadFromJsonAsync<Guid>();
     }
 
     private class MangaDto
