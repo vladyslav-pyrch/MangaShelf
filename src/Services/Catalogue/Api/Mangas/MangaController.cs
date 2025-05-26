@@ -56,6 +56,7 @@ public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatc
     }
 
     [HttpPut("manga/{id:guid}/change-description")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> ChangeDescription([FromRoute] Guid id, [FromBody] string description,
         CancellationToken cancellationToken)
     {
@@ -65,4 +66,14 @@ public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatc
 
         return NoContent();
     }
+
+    [HttpPost("manga/{id:guid}/add-volume")]
+    public async Task<IActionResult> AddVolume([FromRoute] Guid id, [FromBody] AddVolumeRequest addVolume,
+        CancellationToken cancellationToken)
+    {
+        var volumeId = Guid.CreateVersion7();
+
+        return Created($"/manga/{id}/volume/{Guid.CreateVersion7()}", volumeId);
+    }
+
 }

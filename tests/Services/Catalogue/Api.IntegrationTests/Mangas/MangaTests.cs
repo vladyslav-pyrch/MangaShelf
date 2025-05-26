@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
+using MangaShelf.Catalogue.Domain.Mangas;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit.Abstractions;
 
@@ -185,6 +186,32 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
 
         magna.Should().NotBeNull();
         magna.Description.Should().BeEquivalentTo(description);
+    }
+
+    [Fact]
+    public async Task GivenVolumeNameAndOrder_WhenAddingVolume()
+    {
+        var manga = new
+        {
+            Name = "Some manga title",
+            AuthorId = "any-nonempty-string",
+        };
+
+        using HttpResponseMessage response = await _httpClient.PostAsJsonAsync("create-manga", manga);
+        var magnaId = await response.Content.ReadFromJsonAsync<Guid>();
+
+        var volume = new
+        {
+            Name = "Some volume name",
+            Order = 1
+        };
+
+        using HttpResponseMessage response2 = await _httpClient.PostAsJsonAsync($"manga/{magnaId}/add-volume", volume);
+
+        response2.StatusCode.Should().Be(HttpStatusCode.Created);
+        response2.Headers.Location.Should().NotBeNull();
+        var volumeId = await response2.Content.ReadFromJsonAsync<Guid>();
+        volumeId.Should().NotBeEmpty();
     }
 
     private class MangaDto
