@@ -81,4 +81,15 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
 
         when.Should().Throw<BusinessRuleException>();
     }
+
+    [Fact]
+    public void GivenDescriptionIsLongerThan500Characters_WhenChangingDescription_ThenThrowBusinessRuleException()
+    {
+        var manga = Manga.Create(_id, _name, _author);
+        string description = new('a', 5001);
+
+        Action when = () => manga.ChangeDescription(description);
+
+        when.Should().Throw<BusinessRuleException>();
+    }
 }

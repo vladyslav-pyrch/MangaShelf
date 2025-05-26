@@ -44,6 +44,9 @@ public class Manga : AggregateRoot<MangaId>
         {
             BusinessRuleException.ThrowIfNull(value, $"{nameof(Description)} cannot be null.");
 
+            if (value.Length > 5000)
+                throw new BusinessRuleException($"{nameof(Description)} should not be longer than 5000 characters.");
+
             _description = value;
         }
     }
