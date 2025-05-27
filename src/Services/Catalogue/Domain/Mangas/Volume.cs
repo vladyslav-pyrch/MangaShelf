@@ -19,7 +19,7 @@ public class Volume : Entity<VolumeId>
         get => _title;
         private set
         {
-            BusinessRuleException.ThrowIfNullOrWhiteSpace(value);
+            BusinessRuleException.ThrowIfNullOrWhiteSpace(value, $"{nameof(Title)} may not be null or whitespace.");
 
             _title = value;
         }
@@ -28,7 +28,13 @@ public class Volume : Entity<VolumeId>
     public int Order
     {
         get => _order;
-        private set => _order = value;
+        private set
+        {
+            if (value <= 0)
+                throw new BusinessRuleException($"{nameof(Order)} may not be zero or negative.");
+
+            _order = value;
+        }
     }
 
     public static Volume Create(VolumeId id, string title, int order) => new(id, title, order);

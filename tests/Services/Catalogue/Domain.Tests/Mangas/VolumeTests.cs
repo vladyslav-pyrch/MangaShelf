@@ -44,4 +44,28 @@ public class VolumeTests(ITestOutputHelper testOutputHelper)
 
         when.Should().Throw<BusinessRuleException>();
     }
+
+    [Fact]
+    public void GivenOrderIsZero_WhenCreatingVolume_ThenThrowsBusinessRuleException()
+    {
+        var id = new VolumeId(Guid.NewGuid());
+        var title = "Volume 1";
+        var order = 0;
+
+        Action when = () => Volume.Create(id, title, order);
+
+        when.Should().Throw<BusinessRuleException>();
+    }
+
+    [Fact]
+    public void GivenOrderIsNegative_WhenCreatingVolume_ThenThrowsBusinessRuleException()
+    {
+        var id = new VolumeId(Guid.NewGuid());
+        var title = "Volume 1";
+        var order = -1;
+
+        Action when = () => Volume.Create(id, title, order);
+
+        when.Should().Throw<BusinessRuleException>();
+    }
 }
