@@ -17,7 +17,12 @@ public class Volume : Entity<VolumeId>
     public string Title
     {
         get => _title;
-        private set => _title = value;
+        private set
+        {
+            BusinessRuleException.ThrowIfNullOrWhiteSpace(value);
+
+            _title = value;
+        }
     }
 
     public int Order
