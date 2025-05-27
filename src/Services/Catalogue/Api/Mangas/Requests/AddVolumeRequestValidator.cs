@@ -6,8 +6,8 @@ public class AddVolumeRequestValidator : AbstractValidator<AddVolumeRequest>
 {
     public AddVolumeRequestValidator()
     {
-        RuleFor(request => request.Name)
-            .NotEmpty().WithMessage($"{nameof(AddVolumeRequest.Name)} is required.");
+        RuleFor(request => request.Title)
+            .NotEmpty().WithMessage($"{nameof(AddVolumeRequest.Title)} is required.");
 
     }
 }

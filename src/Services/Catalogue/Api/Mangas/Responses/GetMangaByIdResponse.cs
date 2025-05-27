@@ -4,7 +4,7 @@ public class GetMangaByIdResponse
 {
     public Guid Id { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string Title { get; set; } = null!;
 
     public string AuthorId { get; set; } = null!;
 

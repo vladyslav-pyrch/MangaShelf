@@ -16,12 +16,12 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     [InlineData("Naruto")]
     [InlineData("Bleach")]
     [InlineData("One Piece")]
-    public async Task GivenName_WhenCreatingManga(string name)
+    public async Task GivenTitle_WhenCreatingManga(string name)
     {
         //Given
         var createManga = new
         {
-            Name = name,
+            Title = name,
             AuthorId = "any-nonempty-string"
         };
 
@@ -41,15 +41,15 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     }
 
     [Fact]
-    public async Task GivenNameIsNull_WhenCreatingManga()
+    public async Task GivenTitleIsNull_WhenCreatingManga()
     {
         //Given
         var manga = new
         {
-            Name = "",
+            Title = "",
             AuthorId = "any-nonempty-string"
         };
-        manga = manga with { Name = null };
+        manga = manga with { Title = null };
         
         //When
         using HttpResponseMessage request = await _httpClient.PostAsJsonAsync("create-manga", manga);
@@ -60,12 +60,12 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     }
 
     [Fact]
-    public async Task GivenNameIsEmpty_WhenCreatingManga()
+    public async Task GivenTitleIsEmpty_WhenCreatingManga()
     {
         //Given
         var manga = new
         {
-            Name = string.Empty,
+            Title = string.Empty,
             AuthorId = "any-nonempty-string"
         };
 
@@ -78,11 +78,11 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     }
 
     [Fact]
-    public async Task GivenNameIsLongerThan50Characters_WhenCreatingManga()
+    public async Task GivenTitleIsLongerThan50Characters_WhenCreatingManga()
     {
         var manga = new
         {
-            Name = new string('a', 51),
+            Title = new string('a', 51),
             AuthorId = "any-nonempty-string"
         };
 
@@ -97,7 +97,7 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     {
         var manga = new
         {
-            Name = "Title",
+            Title = "Title",
             AuthorId = string.Empty
         };
 
@@ -112,7 +112,7 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     {
         var manga = new
         {
-            Name = "Title",
+            Title = "Title",
             AuthorId = string.Empty
         };
         manga = manga with { AuthorId = null };
@@ -127,11 +127,11 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     public async Task GivenMangaWasCreated_WhenRetrievingById()
     {
         //Given
-        const string mangaName = "Some manga title";
+        const string mangaTitle = "Some manga title";
         const string authorId = "any-nonempty-string";
         var manga = new
         {
-            Name = mangaName,
+            Title = mangaTitle,
             AuthorId = authorId
         };
 
@@ -147,7 +147,7 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
         //Then
         mangaRetrieved.Should().NotBeNull();
         mangaRetrieved.Id.Should().NotBeEmpty();
-        mangaRetrieved.Name.Should().BeEquivalentTo(mangaName);
+        mangaRetrieved.Title.Should().BeEquivalentTo(mangaTitle);
         mangaRetrieved.AuthorId.Should().BeEquivalentTo(authorId);
         mangaRetrieved.Description.Should().BeEmpty();
     }
@@ -206,13 +206,13 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     }
 
     [Fact]
-    public async Task GivenVolumeName_WhenAddingVolume()
+    public async Task GivenVolumeTitle_WhenAddingVolume()
     {
         Guid magnaId = await CreateManga();
 
         var volume = new
         {
-            Name = "Some volume name"
+            Title = "Some volume name"
         };
 
         using HttpResponseMessage response2 = await _httpClient.PostAsJsonAsync($"manga/{magnaId}/add-volume", volume);
@@ -224,16 +224,16 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     }
 
     [Fact]
-    public async Task GivenVolumeNameIsNull_WhenAddingVolume()
+    public async Task GivenVolumeTitleIsNull_WhenAddingVolume()
     {
         Guid magnaId = await CreateManga();
 
         var volume = new
         {
-            Name = "Some volume name"
+            Title = "Some volume name"
         };
 
-        volume = volume with { Name = null };
+        volume = volume with { Title = null };
 
         using HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"manga/{magnaId}/add-volume", volume);
 
@@ -243,13 +243,13 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     }
 
     [Fact]
-    public async Task GivenVolumeNameIsEmpty_WhenAddingVolume()
+    public async Task GivenVolumeTitleIsEmpty_WhenAddingVolume()
     {
         Guid magnaId = await CreateManga();
 
         var volume = new
         {
-            Name = string.Empty
+            Title = string.Empty
         };
 
         using HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"manga/{magnaId}/add-volume", volume);
@@ -263,7 +263,7 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     {
         var manga = new
         {
-            Name = "Some manga title",
+            Title = "Some manga title",
             AuthorId = "any-nonempty-string",
         };
 
@@ -275,7 +275,7 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
     {
         public Guid Id { get; set; }
 
-        public string Name { get; set; }
+        public string Title { get; set; }
 
         public string AuthorId { get; set; }
 

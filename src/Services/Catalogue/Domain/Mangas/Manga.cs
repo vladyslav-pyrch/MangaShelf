@@ -4,30 +4,30 @@ namespace MangaShelf.Catalogue.Domain.Mangas;
 
 public class Manga : AggregateRoot<MangaId>
 {
-    private readonly string _name = null!;
+    private readonly string _title = null!;
 
     private readonly Author _author = null!;
 
     private string _description = null!;
 
-    public Manga(MangaId id, string name, Author author, string description): base(id)
+    public Manga(MangaId id, string title, Author author, string description): base(id)
     {
-        Name = name;
+        Title = title;
         Author = author;
         Description = description;
     }
 
-    public string Name
+    public string Title
     {
-        get => _name;
+        get => _title;
         private init
         {
-            BusinessRuleException.ThrowIfNullOrWhiteSpace(value, $"{nameof(Name)} cannot be null or whitespace.");
+            BusinessRuleException.ThrowIfNullOrWhiteSpace(value, $"{nameof(Title)} cannot be null or whitespace.");
 
             if (value.Length > 50)
-                throw new BusinessRuleException($"{nameof(Name)} should not be longer than 50 characters.");
+                throw new BusinessRuleException($"{nameof(Title)} should not be longer than 50 characters.");
 
-            _name = value;
+            _title = value;
         }
     }
 

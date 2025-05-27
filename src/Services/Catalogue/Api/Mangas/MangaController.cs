@@ -28,7 +28,7 @@ public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatc
             return BadRequest(ModelState);
 
         Result<Guid> id = await commandDispatcher.Dispatch<CreateMangaCommand, Result<Guid>>(
-            new CreateMangaCommand(createManga.Name, createManga.AuthorId), cancellationToken
+            new CreateMangaCommand(createManga.Title, createManga.AuthorId), cancellationToken
         );
 
         return Created($"/manga/{id.Value}", id.Value);
@@ -49,7 +49,7 @@ public class MangaController(ICommandDispatcher commandDispatcher, IQueryDispatc
         return Ok(new GetMangaByIdResponse
         {
             Id = mangaDto.Id,
-            Name = mangaDto.Name,
+            Title = mangaDto.Name,
             AuthorId = mangaDto.AuthorId,
             Description = mangaDto.Description
         });

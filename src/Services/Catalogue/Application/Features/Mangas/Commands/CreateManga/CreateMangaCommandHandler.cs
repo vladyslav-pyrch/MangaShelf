@@ -17,7 +17,7 @@ public class CreateMangaCommandHandler(IMangaRepository mangaRepository, IValida
         if (!result.IsValid)
             return result.ToFailure<Guid>();
 
-        string name = command.Name;
+        string name = command.Title;
         MangaId id = mangaRepository.GenerateId();
         var author = new Author(command.AuthorId);
 

@@ -2,4 +2,4 @@
 
 namespace MangaShelf.Catalogue.Application.Features.Mangas.Commands.CreateManga;
 
-public record CreateMangaCommand(string Name, string AuthorId) : ICommand<Result<Guid>>;
+public record CreateMangaCommand(string Title, string AuthorId) : ICommand<Result<Guid>>;

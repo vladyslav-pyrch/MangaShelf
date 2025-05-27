@@ -31,7 +31,7 @@ public class MangaRepository(CatalogueDbContext dbContext) : IMangaRepository
         var mangaEntity = new MangaEntity
         {
             Id = manga.Id.Value,
-            Name = manga.Name,
+            Name = manga.Title,
             AuthorId = manga.Author.Id,
             Description = manga.Description
         };
