@@ -21,6 +21,9 @@ public class Volume : Entity<VolumeId>
         {
             BusinessRuleException.ThrowIfNullOrWhiteSpace(value, $"{nameof(Title)} may not be null or whitespace.");
 
+            if (value.Length > 50)
+                throw new BusinessRuleException($"{nameof(Title)} may not be longer than 50 characters.");
+
             _title = value;
         }
     }
@@ -38,4 +41,6 @@ public class Volume : Entity<VolumeId>
     }
 
     public static Volume Create(VolumeId id, string title, int order) => new(id, title, order);
+
+    public void ChangeTitle(string title) => Title = title;
 }
