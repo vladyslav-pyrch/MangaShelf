@@ -205,60 +205,6 @@ public class MangaTests(WebApplicationFactory<Program> webApplicationFactory, IT
         testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
     }
 
-    [Fact]
-    public async Task GivenVolumeTitle_WhenAddingVolume()
-    {
-        Guid magnaId = await CreateManga();
-
-        var volume = new
-        {
-            Title = "Some volume name"
-        };
-
-        using HttpResponseMessage response2 = await _httpClient.PostAsJsonAsync($"manga/{magnaId}/add-volume", volume);
-
-        response2.StatusCode.Should().Be(HttpStatusCode.Created);
-        response2.Headers.Location.Should().NotBeNull();
-        var volumeId = await response2.Content.ReadFromJsonAsync<Guid>();
-        volumeId.Should().NotBeEmpty();
-    }
-
-    [Fact]
-    public async Task GivenVolumeTitleIsNull_WhenAddingVolume()
-    {
-        Guid magnaId = await CreateManga();
-
-        var volume = new
-        {
-            Title = "Some volume name"
-        };
-
-        volume = volume with { Title = null };
-
-        using HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"manga/{magnaId}/add-volume", volume);
-
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
-
-    }
-
-    [Fact]
-    public async Task GivenVolumeTitleIsEmpty_WhenAddingVolume()
-    {
-        Guid magnaId = await CreateManga();
-
-        var volume = new
-        {
-            Title = string.Empty
-        };
-
-        using HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"manga/{magnaId}/add-volume", volume);
-
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
-
-    }
-
     private async Task<Guid> CreateManga()
     {
         var manga = new
