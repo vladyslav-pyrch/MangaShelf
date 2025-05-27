@@ -4,7 +4,7 @@ namespace MangaShelf.Catalogue.Domain.Mangas;
 
 public class Manga : AggregateRoot<MangaId>
 {
-    private readonly string _title = null!;
+    private string _title = null!;
 
     private readonly Author _author = null!;
 
@@ -20,7 +20,7 @@ public class Manga : AggregateRoot<MangaId>
     public string Title
     {
         get => _title;
-        private init
+        private set
         {
             BusinessRuleException.ThrowIfNullOrWhiteSpace(value, $"{nameof(Title)} cannot be null or whitespace.");
 
@@ -56,7 +56,9 @@ public class Manga : AggregateRoot<MangaId>
         }
     }
 
-    public static Manga Create(MangaId id, string name, Author author) => new(id, name, author, "");
+    public static Manga Create(MangaId id, string title, Author author) => new(id, title, author, "");
 
     public void ChangeDescription(string description) => Description = description;
+
+    public void ChangeTitle(string title) => Title = title;
 }

@@ -101,4 +101,15 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
 
         when.Should().Throw<BusinessRuleException>();
     }
+
+    [Fact]
+    public void GivenNewTitle_WhenChangingTitle_ThenTitleIsChanged()
+    {
+        var manga = Manga.Create(_id, _title, _author);
+        var newTitle = "New title";
+
+        manga.ChangeTitle(newTitle);
+
+        manga.Title.Should().BeEquivalentTo(newTitle);
+    }
 }
