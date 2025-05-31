@@ -150,4 +150,18 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
 
         when.Should().Throw<BusinessRuleException>();
     }
+
+    [Fact]
+    public void GivenChapterIsAdded_WhenGettingChapterById_ThenReturnChapterWithTheId()
+    {
+        var manga = Manga.Create(_id, _title, _author);
+        var chapterId = new ChapterId(Guid.CreateVersion7());
+        var chapterTitle = "Title";
+
+        manga.AddChapter(chapterId, chapterTitle);
+
+        Chapter chapter = manga.GetChapter(chapterId);
+
+        chapter.Id.Should().Be(chapterId);
+    }
 }

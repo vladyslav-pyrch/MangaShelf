@@ -79,6 +79,8 @@ public class Manga : AggregateRoot<MangaId>
         _chapters.Add(chapterId, chapter);
     }
 
+    public Chapter GetChapter(ChapterId chapterId) => _chapters[chapterId];
+
     public void ChangeChapterTitle(ChapterId chapterId, string newTitle) =>
         _chapters[chapterId].ChangeTitle(newTitle);
 }
