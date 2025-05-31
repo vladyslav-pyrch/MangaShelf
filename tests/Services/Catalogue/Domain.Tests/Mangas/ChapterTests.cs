@@ -65,4 +65,78 @@ public class ChapterTests
         _manga.Chapters.Should().Contain(chapter => chapter.Id == id)
             .Which.Title.Should().BeEquivalentTo(newTitle);
     }
+
+    [Fact]
+    public void GivenChapterWithTheSameIdExists_WhenAddingChapter_ThenThrowBusinessRuleException()
+    {
+        var guid = Guid.CreateVersion7();
+
+        var chapterId1 = new ChapterId(guid);
+        var chapterTitle1 = "Title1";
+
+        _manga.AddChapter(chapterId1, chapterTitle1);
+
+        var chapterId2 = new ChapterId(guid);
+        var chapterTitle2 = "Title2";
+
+        Action when = () => _manga.AddChapter(chapterId2, chapterTitle2);
+
+        when.Should().Throw<BusinessRuleException>();
+    }
+
+    [Fact]
+    public void GivenChapterWithTheSameTitleExists_WhenAddingChapter_ThenThrowBusinessRuleException()
+    {
+        var title = "Title";
+
+        var chapterId1 = new ChapterId(Guid.CreateVersion7());
+        var chapterTitle1 = new string(title);
+
+        _manga.AddChapter(chapterId1, chapterTitle1);
+
+        var chapterId2 = new ChapterId(Guid.CreateVersion7());
+        var chapterTitle2 = new string(title);
+
+        Action when = () => _manga.AddChapter(chapterId2, chapterTitle2);
+
+        when.Should().Throw<BusinessRuleException>();
+    }
+
+    [Fact]
+    public void GivenChapterIsAdded_WhenGettingChapterById_ThenReturnChapterWithTheId()
+    {
+        var chapterId = new ChapterId(Guid.CreateVersion7());
+        var chapterTitle = "Title";
+
+        _manga.AddChapter(chapterId, chapterTitle);
+
+        Chapter chapter = _manga.GetChapter(chapterId);
+
+        chapter.Id.Should().Be(chapterId);
+    }
+
+    [Fact]
+    public void GivenChapterIsNotAdded_WhenGettingChapterById_ThenThrowBusinessRuleException()
+    {
+        var chapterId = new ChapterId(Guid.CreateVersion7());
+
+        Action when = () => _manga.GetChapter(chapterId);
+
+        when.Should().Throw<BusinessRuleException>();
+    }
+
+    [Fact]
+    public void GivenChapterIsAdded_WhenRemovingChapterById_ThenChapterIsRemoved()
+    {
+        var chapterId = new ChapterId(Guid.CreateVersion7());
+        var chapterTitle = "Title";
+
+        _manga.AddChapter(chapterId, chapterTitle);
+
+        _manga.Chapters.Should().Contain(chapter => chapter.Id == chapterId);
+
+        _manga.RemoveChapter(chapterId);
+
+        _manga.Chapters.Should().NotContain(chapter => chapter.Id == chapterId);
+    }
 }
