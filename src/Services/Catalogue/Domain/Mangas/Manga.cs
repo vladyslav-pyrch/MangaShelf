@@ -10,7 +10,7 @@ public class Manga : AggregateRoot<MangaId>
 
     private string _description = null!;
 
-    private IDictionary<ChapterId, Chapter> _chapters = new Dictionary<ChapterId, Chapter>();
+    private readonly IDictionary<ChapterId, Chapter> _chapters = new Dictionary<ChapterId, Chapter>();
 
     public Manga(MangaId id, string title, Author author, string description): base(id)
     {
@@ -72,4 +72,7 @@ public class Manga : AggregateRoot<MangaId>
 
         _chapters.Add(chapterId, chapter);
     }
+
+    public void ChangeChapterTitle(ChapterId chapterId, string newTitle) =>
+        _chapters[chapterId].ChangeTitle(newTitle);
 }

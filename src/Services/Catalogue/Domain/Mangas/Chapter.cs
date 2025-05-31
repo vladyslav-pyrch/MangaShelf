@@ -23,4 +23,6 @@ public class Chapter : Entity<ChapterId>
             _title = value;
         }
     }
+
+    public void ChangeTitle(string newTitle) => Title = newTitle;
 }

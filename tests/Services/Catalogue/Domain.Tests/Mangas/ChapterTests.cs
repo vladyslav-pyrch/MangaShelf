@@ -49,4 +49,20 @@ public class ChapterTests
 
         when.Should().Throw<BusinessRuleException>();
     }
+
+    [Fact]
+    public void GivenNewTitle_WhenChangingChapterTitle_ThenChapterTitleIsChanged()
+    {
+        var id = new ChapterId(Guid.CreateVersion7());
+        var title = "Chapter number 1";
+
+        _manga.AddChapter(id, title);
+
+        var newTitle = "Chapter number1: rebellion";
+
+        _manga.ChangeChapterTitle(id, newTitle);
+
+        _manga.Chapters.Should().Contain(chapter => chapter.Id == id)
+            .Which.Title.Should().BeEquivalentTo(newTitle);
+    }
 }
