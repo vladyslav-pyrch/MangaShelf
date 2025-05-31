@@ -131,4 +131,23 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
 
         when.Should().Throw<BusinessRuleException>();
     }
+
+    [Fact]
+    public void GivenChapterWithTheSameTitleExists_WhenAddingChapter_ThenThrowBusinessRuleException()
+    {
+        var manga = Manga.Create(_id, _title, _author);
+        var title = "Title";
+
+        var chapterId1 = new ChapterId(Guid.CreateVersion7());
+        var chapterTitle1 = new string(title);
+
+        manga.AddChapter(chapterId1, chapterTitle1);
+
+        var chapterId2 = new ChapterId(Guid.CreateVersion7());
+        var chapterTitle2 = new string(title);
+
+        Action when = () => manga.AddChapter(chapterId2, chapterTitle2);
+
+        when.Should().Throw<BusinessRuleException>();
+    }
 }
