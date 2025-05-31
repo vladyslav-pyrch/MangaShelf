@@ -89,7 +89,8 @@ public class Manga : AggregateRoot<MangaId>
 
     public void RemoveChapter(ChapterId chapterId)
     {
-        _chapters.Remove(chapterId);
+        if (!_chapters.Remove(chapterId))
+            throw new BusinessRuleException($"Chapter with such id has not been added. (id = {chapterId})");
     }
 
     public void ChangeChapterTitle(ChapterId chapterId, string newTitle) =>

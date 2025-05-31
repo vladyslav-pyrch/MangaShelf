@@ -139,4 +139,14 @@ public class ChapterTests
 
         _manga.Chapters.Should().NotContain(chapter => chapter.Id == chapterId);
     }
+
+    [Fact]
+    public void GivenChapterIsNotAdded_WhenRemovingChapterById_ThenThrowBusinessRuleException()
+    {
+        var chapterId = new ChapterId(Guid.CreateVersion7());
+
+        Action when = () => _manga.RemoveChapter(chapterId);
+
+        when.Should().Throw<BusinessRuleException>();
+    }
 }
