@@ -164,4 +164,31 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
 
         chapter.Id.Should().Be(chapterId);
     }
+
+    [Fact]
+    public void GivenChapterIsNotAdded_WhenGettingChapterById_ThenThrowBusinessRuleException()
+    {
+        var manga = Manga.Create(_id, _title, _author);
+        var chapterId = new ChapterId(Guid.CreateVersion7());
+
+        Action when = () => manga.GetChapter(chapterId);
+
+        when.Should().Throw<BusinessRuleException>();
+    }
+
+    [Fact]
+    public void GivenChapterIsAdded_WhenRemovingChapterById_ThenChapterIsRemoved()
+    {
+        var manga = Manga.Create(_id, _title, _author);
+        var chapterId = new ChapterId(Guid.CreateVersion7());
+        var chapterTitle = "Title";
+
+        manga.AddChapter(chapterId, chapterTitle);
+
+        manga.Chapters.Should().Contain(chapter => chapter.Id == chapterId);
+
+        manga.RemoveChapter(chapterId);
+
+        manga.Chapters.Should().NotContain(chapter => chapter.Id == chapterId);
+    }
 }

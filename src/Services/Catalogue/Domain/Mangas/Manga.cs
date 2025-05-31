@@ -79,7 +79,18 @@ public class Manga : AggregateRoot<MangaId>
         _chapters.Add(chapterId, chapter);
     }
 
-    public Chapter GetChapter(ChapterId chapterId) => _chapters[chapterId];
+    public Chapter GetChapter(ChapterId chapterId)
+    {
+        if (_chapters.TryGetValue(chapterId, out Chapter? chapter))
+            return chapter;
+
+        throw new BusinessRuleException($"Chapter with such id has not been added. (id = {chapterId})");
+    }
+
+    public void RemoveChapter(ChapterId chapterId)
+    {
+        _chapters.Remove(chapterId);
+    }
 
     public void ChangeChapterTitle(ChapterId chapterId, string newTitle) =>
         _chapters[chapterId].ChangeTitle(newTitle);
