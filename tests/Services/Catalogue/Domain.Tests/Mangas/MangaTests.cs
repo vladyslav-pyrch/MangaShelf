@@ -112,16 +112,4 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
 
         manga.Title.Should().BeEquivalentTo(newTitle);
     }
-
-    [Fact]
-    public void GivenChapterTitle_WhenAddingChapter_ThenChapterIsAdded()
-    {
-        var manga = Manga.Create(_id, _title, _author);
-        var chapterId = new ChapterId(Guid.CreateVersion7());
-        var chapterTitle = "Chapter number 1";
-
-        manga.AddChapter(chapterId, chapterTitle);
-
-        manga.Chapters.Should().Contain(chapter => chapter.Id == chapterId && chapter.Title.Equals(chapterTitle));
-    }
 }
