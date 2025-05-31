@@ -68,6 +68,9 @@ public class Manga : AggregateRoot<MangaId>
 
     public void AddChapter(ChapterId chapterId, string title)
     {
+        if (_chapters.ContainsKey(chapterId))
+            throw new BusinessRuleException($"Chapter with the same id has already been added. (id = {chapterId})");
+
         var chapter = Chapter.Create(chapterId, title);
 
         _chapters.Add(chapterId, chapter);

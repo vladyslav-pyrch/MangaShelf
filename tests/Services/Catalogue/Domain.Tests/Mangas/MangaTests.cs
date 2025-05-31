@@ -112,4 +112,23 @@ public class MangaTests(ITestOutputHelper testOutputHelper)
 
         manga.Title.Should().BeEquivalentTo(newTitle);
     }
+
+    [Fact]
+    public void GivenChapterWithTheSameIdExists_WhenAddingChapter_ThenThrowBusinessRuleException()
+    {
+        var manga = Manga.Create(_id, _title, _author);
+        var guid = Guid.CreateVersion7();
+
+        var chapterId1 = new ChapterId(guid);
+        var chapterTitle1 = "Title1";
+
+        manga.AddChapter(chapterId1, chapterTitle1);
+
+        var chapterId2 = new ChapterId(guid);
+        var chapterTitle2 = "Title2";
+
+        Action when = () => manga.AddChapter(chapterId2, chapterTitle2);
+
+        when.Should().Throw<BusinessRuleException>();
+    }
 }
