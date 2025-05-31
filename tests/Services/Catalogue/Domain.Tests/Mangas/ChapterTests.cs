@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using MangaShelf.Catalogue.Domain.Mangas;
+using MangaShelf.Domain.Abstractions;
 
 namespace MangaShelf.Catalogue.Domain.Tests.Mangas;
 
@@ -9,21 +10,43 @@ public class ChapterTests
 
     public ChapterTests()
     {
-        var id = new MangaId(Guid.NewGuid());
-        var title = "Some title";
-        var author = new Author("Author");
+        var mangaId = new MangaId(Guid.NewGuid());
+        var mangaTitle = "Some title";
+        var magnaAuthor = new Author("Author");
 
-        _manga = Manga.Create(id, title, author);
+        _manga = Manga.Create(mangaId, mangaTitle, magnaAuthor);
     }
 
     [Fact]
-    public void GivenChapterTitleAndId_WhenAddingChapter_ThenChapterIsAdded()
+    public void GivenTitleAndId_WhenAddingChapter_ThenChapterIsAdded()
     {
-        var chapterId = new ChapterId(Guid.CreateVersion7());
-        var chapterTitle = "Chapter number 1";
+        var id = new ChapterId(Guid.CreateVersion7());
+        var title = "Chapter number 1";
 
-        _manga.AddChapter(chapterId, chapterTitle);
+        _manga.AddChapter(id, title);
 
-        _manga.Chapters.Should().Contain(chapter => chapter.Id == chapterId && chapter.Title.Equals(chapterTitle));
+        _manga.Chapters.Should().Contain(chapter => chapter.Id == id && chapter.Title.Equals(title));
+    }
+
+    [Fact]
+    public void GivenTitleIsNull_WhenAddingChapter_ThenThrowBusinessRuleException()
+    {
+        var id = new ChapterId(Guid.CreateVersion7());
+        string title = null!;
+
+        Action when = () => _manga.AddChapter(id, title);
+
+        when.Should().Throw<BusinessRuleException>();
+    }
+
+    [Fact]
+    public void GivenTitleIsEmpty_WhenAddingChapter_ThenThrowBusinessRuleException()
+    {
+        var id = new ChapterId(Guid.CreateVersion7());
+        var title = string.Empty;
+
+        Action when = () => _manga.AddChapter(id, title);
+
+        when.Should().Throw<BusinessRuleException>();
     }
 }
