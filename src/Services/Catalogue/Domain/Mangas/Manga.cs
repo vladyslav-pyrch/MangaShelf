@@ -99,4 +99,16 @@ public class Manga : AggregateRoot<MangaId>
 
     public void ChangeChapterNumber(ChapterId chapterId, int newNumber) =>
         GetChapter(chapterId).ChangeNumber(newNumber);
+
+    public void SwapChapters(ChapterId chapterId1, ChapterId chapterId2)
+    {
+        Chapter chapter1 = GetChapter(chapterId1);
+        Chapter chapter2 = GetChapter(chapterId2);
+
+        int chapter1Number = chapter1.Number;
+        int chapter2Number = chapter2.Number;
+
+        chapter1.ChangeNumber(chapter2Number);
+        chapter2.ChangeNumber(chapter1Number);
+    }
 }

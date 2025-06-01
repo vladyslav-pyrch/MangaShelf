@@ -305,4 +305,26 @@ public class ChapterTests
 
         when.Should().Throw<BusinessRuleException>();
     }
+
+    [Fact]
+    public void GiveTwoChapters_WhenSwappingChapters_ThenTheirNumbersAreSwapped()
+    {
+        var chapterId1 = new ChapterId(Guid.CreateVersion7());
+        var chapterTitle1 = "Title1";
+        var number1 = 1;
+        _manga.AddChapter(chapterId1, chapterTitle1, number1);
+
+        var chapterId2 = new ChapterId(Guid.CreateVersion7());
+        var chapterTitle2 = "Title2";
+        var number2 = 2;
+        _manga.AddChapter(chapterId2, chapterTitle2, number2);
+
+        _manga.GetChapter(chapterId1).Number.Should().Be(number1);
+        _manga.GetChapter(chapterId2).Number.Should().Be(number2);
+
+        _manga.SwapChapters(chapterId1, chapterId2);
+
+        _manga.GetChapter(chapterId1).Number.Should().Be(number2);
+        _manga.GetChapter(chapterId2).Number.Should().Be(number1);
+    }
 }
