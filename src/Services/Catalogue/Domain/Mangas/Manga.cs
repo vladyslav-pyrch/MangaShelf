@@ -66,15 +66,16 @@ public class Manga : AggregateRoot<MangaId>
 
     public void ChangeTitle(string title) => Title = title;
 
-    public void AddChapter(ChapterId chapterId, string title)
+    public void AddChapter(ChapterId chapterId, string title, int number)
     {
         if (_chapters.ContainsKey(chapterId))
             throw new BusinessRuleException($"Chapter with the same id has already been added. (id = {chapterId})");
-
         if (_chapters.Values.Any(chapter => chapter.Title.Equals(title)))
             throw new BusinessRuleException($"Chapter with the same title has already been added. (title = {title})");
+        if (_chapters.Values.Any(chapter => chapter.Number == number))
+            throw new BusinessRuleException($"Chapter with the same number has already been added. (number = {number})");
 
-        var chapter = Chapter.Create(chapterId, title);
+        var chapter = Chapter.Create(chapterId, title, number);
 
         _chapters.Add(chapterId, chapter);
     }
