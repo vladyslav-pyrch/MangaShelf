@@ -39,4 +39,6 @@ public class Chapter : Entity<ChapterId>
     }
 
     internal void ChangeTitle(string newTitle) => Title = newTitle;
+
+    internal void ChangeNumber(int newNumber) => Number = newNumber;
 }
