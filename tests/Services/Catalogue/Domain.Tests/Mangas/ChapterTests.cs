@@ -307,7 +307,7 @@ public class ChapterTests
     }
 
     [Fact]
-    public void GiveTwoChapters_WhenSwappingChapters_ThenTheirNumbersAreSwapped()
+    public void GivenTwoChapters_WhenSwappingChapters_ThenTheirNumbersAreSwapped()
     {
         var chapterId1 = new ChapterId(Guid.CreateVersion7());
         var chapterTitle1 = "Title1";
@@ -326,5 +326,41 @@ public class ChapterTests
 
         _manga.GetChapter(chapterId1).Number.Should().Be(number2);
         _manga.GetChapter(chapterId2).Number.Should().Be(number1);
+    }
+
+    [Fact]
+    public void GivenChapterWithTitleExists_WhenChangingTitle_ThenThrowBusinessRuleException()
+    {
+        var chapterId1 = new ChapterId(Guid.CreateVersion7());
+        var chapterTitle1 = "Title1";
+        var number1 = 1;
+        _manga.AddChapter(chapterId1, chapterTitle1, number1);
+
+        var chapterId2 = new ChapterId(Guid.CreateVersion7());
+        var chapterTitle2 = "Title2";
+        var number2 = 2;
+        _manga.AddChapter(chapterId2, chapterTitle2, number2);
+
+        Action when = () => _manga.ChangeChapterTitle(chapterId2, chapterTitle1);
+
+        when.Should().Throw<BusinessRuleException>();
+    }
+
+    [Fact]
+    public void GivenChapterWithNumberExists_WhenChangingNumber_ThenThrowBusinessRuleException()
+    {
+        var chapterId1 = new ChapterId(Guid.CreateVersion7());
+        var chapterTitle1 = "Title1";
+        var number1 = 1;
+        _manga.AddChapter(chapterId1, chapterTitle1, number1);
+
+        var chapterId2 = new ChapterId(Guid.CreateVersion7());
+        var chapterTitle2 = "Title2";
+        var number2 = 2;
+        _manga.AddChapter(chapterId2, chapterTitle2, number2);
+
+        Action when = () => _manga.ChangeChapterNumber(chapterId2, number1);
+
+        when.Should().Throw<BusinessRuleException>();
     }
 }

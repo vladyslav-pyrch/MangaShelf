@@ -94,11 +94,21 @@ public class Manga : AggregateRoot<MangaId>
             throw new BusinessRuleException($"Chapter with such id has not been added. (id = {chapterId})");
     }
 
-    public void ChangeChapterTitle(ChapterId chapterId, string newTitle) =>
-        GetChapter(chapterId).ChangeTitle(newTitle);
+    public void ChangeChapterTitle(ChapterId chapterId, string newTitle)
+    {
+        if (_chapters.Values.Any(chapter => chapter.Title.Equals(newTitle)))
+            throw new BusinessRuleException($"Chapter with the same title already exists. (newTitle = {newTitle})");
 
-    public void ChangeChapterNumber(ChapterId chapterId, int newNumber) =>
+        GetChapter(chapterId).ChangeTitle(newTitle);
+    }
+
+    public void ChangeChapterNumber(ChapterId chapterId, int newNumber)
+    {
+        if (_chapters.Values.Any(chapter => chapter.Number == newNumber))
+            throw new BusinessRuleException($"Chapter with the same number already exists. (newNumber = {newNumber})");
+
         GetChapter(chapterId).ChangeNumber(newNumber);
+    }
 
     public void SwapChapters(ChapterId chapterId1, ChapterId chapterId2)
     {
